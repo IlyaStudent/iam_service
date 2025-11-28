@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum ApiErrorMessage {
-    POST_NOT_FOUND_BY_ID("Post with ID: {} not found"),
+    POST_NOT_FOUND_BY_ID("Post with ID: %s not found"),
     ;
 
     private final String message;

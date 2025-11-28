@@ -1,5 +1,6 @@
 package com.social_media.iam_service.service.impl;
 
+import com.social_media.iam_service.mapper.PostMapper;
 import com.social_media.iam_service.model.constants.ApiErrorMessage;
 import com.social_media.iam_service.model.dto.post.PostDTO;
 import com.social_media.iam_service.model.entity.Post;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
+    private final PostMapper postMapper;
     private final PostRepository postRepository;
 
     @Override
@@ -22,13 +24,7 @@ public class PostServiceImpl implements PostService {
                         () -> new NotFoundException(ApiErrorMessage.POST_NOT_FOUND_BY_ID.getMessage(postId))
                 );
 
-        PostDTO postDTO = PostDTO.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .likes(post.getLikes())
-                .created(post.getCreated())
-                .build();
+        PostDTO postDTO = postMapper.toPostDTO(post);
 
         return IamResponse.createSuccessful(postDTO);
     }
