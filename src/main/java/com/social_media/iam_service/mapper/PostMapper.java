@@ -2,6 +2,7 @@ package com.social_media.iam_service.mapper;
 
 import com.social_media.iam_service.model.dto.post.PostDTO;
 import com.social_media.iam_service.model.entity.Post;
+import com.social_media.iam_service.model.requests.post.PostRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -13,4 +14,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface PostMapper {
 
     PostDTO toPostDTO(Post post);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "created", ignore = true)
+    Post createPost(PostRequest postRequest);
 }
