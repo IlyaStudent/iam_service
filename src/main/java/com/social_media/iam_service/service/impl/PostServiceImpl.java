@@ -4,6 +4,7 @@ import com.social_media.iam_service.mapper.PostMapper;
 import com.social_media.iam_service.model.constants.ApiErrorMessage;
 import com.social_media.iam_service.model.dto.post.PostDTO;
 import com.social_media.iam_service.model.entity.Post;
+import com.social_media.iam_service.model.exception.DataExistsException;
 import com.social_media.iam_service.model.exception.NotFoundException;
 import com.social_media.iam_service.model.requests.post.PostRequest;
 import com.social_media.iam_service.model.response.IamResponse;
@@ -33,6 +34,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public IamResponse<PostDTO> createPost(PostRequest postRequest) {
+        if (postRepository.existsByTitle(postRequest.getTitle())) {
+            throw new DataExistsException(ApiErrorMessage.POST_ALREADY_EXISTS.getMessage(postRequest.getTitle()));
+        }
+
         Post post = postMapper.createPost(postRequest);
 
         Post savedPost = postRepository.save(post);

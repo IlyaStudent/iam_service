@@ -6,6 +6,7 @@ import com.social_media.iam_service.model.requests.post.PostRequest;
 import com.social_media.iam_service.model.response.IamResponse;
 import com.social_media.iam_service.service.PostService;
 import com.social_media.iam_service.utils.ApiUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class PostController {
 
     @PostMapping("${end.point.create}")
     public ResponseEntity<IamResponse<PostDTO>> createPost(
-            @RequestBody PostRequest postRequest
+            @RequestBody @Valid PostRequest postRequest
     ) {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
