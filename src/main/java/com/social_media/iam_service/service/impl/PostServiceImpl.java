@@ -10,8 +10,11 @@ import com.social_media.iam_service.model.requests.post.PostRequest;
 import com.social_media.iam_service.model.response.IamResponse;
 import com.social_media.iam_service.repositories.PostRepository;
 import com.social_media.iam_service.service.PostService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +47,21 @@ public class PostServiceImpl implements PostService {
 
         PostDTO postDTO = postMapper.toPostDTO(savedPost);
 
+        return IamResponse.createSuccessful(postDTO);
+    }
+
+    @Override
+    public IamResponse<PostDTO> updatePost(@NotNull Integer postId, @NotNull PostRequest postRequest) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(
+                        () -> new NotFoundException(ApiErrorMessage.POST_NOT_FOUND_BY_ID.getMessage(postId))
+                );
+
+        postMapper.updatePost(post, postRequest);
+        post.setUpdated(LocalDateTime.now());
+        post = postRepository.save(post);
+
+        PostDTO postDTO = postMapper.toPostDTO(post);
         return IamResponse.createSuccessful(postDTO);
     }
 }

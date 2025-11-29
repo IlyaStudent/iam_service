@@ -39,4 +39,15 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("${end.point.id}")
+    public ResponseEntity<IamResponse<PostDTO>> updatePostById(
+            @PathVariable(name = "id") Integer postId,
+            @RequestBody @Valid PostRequest postRequest
+    ) {
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        IamResponse<PostDTO> response = postService.updatePost(postId, postRequest);
+        return ResponseEntity.ok(response);
+    }
+
 }

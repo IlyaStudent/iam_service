@@ -10,4 +10,6 @@ public interface PostService {
     IamResponse<PostDTO>  getById(@NotNull Integer id);
 
     IamResponse<PostDTO> createPost(@NotNull PostRequest postRequest);
+
+    IamResponse<PostDTO> updatePost(@NotNull Integer id, @NotNull PostRequest postRequest);
 }
