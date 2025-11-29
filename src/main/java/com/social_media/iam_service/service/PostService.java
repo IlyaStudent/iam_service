@@ -7,9 +7,11 @@ import jakarta.validation.constraints.NotNull;
 
 public interface PostService {
 
-    IamResponse<PostDTO>  getById(@NotNull Integer id);
+    IamResponse<PostDTO>  getById(@NotNull Integer postId);
 
     IamResponse<PostDTO> createPost(@NotNull PostRequest postRequest);
 
-    IamResponse<PostDTO> updatePost(@NotNull Integer id, @NotNull PostRequest postRequest);
+    IamResponse<PostDTO> updatePost(@NotNull Integer postId, @NotNull PostRequest postRequest);
+
+    void softDeletePost(@NotNull Integer postId);
 }
