@@ -1,6 +1,7 @@
 package com.social_media.iam_service.mapper;
 
 import com.social_media.iam_service.model.dto.post.PostDTO;
+import com.social_media.iam_service.model.dto.post.PostSearchDTO;
 import com.social_media.iam_service.model.entity.Post;
 import com.social_media.iam_service.model.requests.post.PostRequest;
 import org.mapstruct.Mapper;
@@ -23,4 +24,7 @@ public interface PostMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "created", ignore = true)
     void updatePost(@MappingTarget Post post, PostRequest updatedPostRequest);
+
+    @Mapping(source = "deleted", target = "deleted")
+    PostSearchDTO toPostSearchDTO(Post post);
 }
