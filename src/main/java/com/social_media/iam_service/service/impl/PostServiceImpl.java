@@ -8,15 +8,19 @@ import com.social_media.iam_service.model.entity.Post;
 import com.social_media.iam_service.model.exception.DataExistsException;
 import com.social_media.iam_service.model.exception.NotFoundException;
 import com.social_media.iam_service.model.requests.post.PostRequest;
+import com.social_media.iam_service.model.requests.post.PostSearchRequest;
 import com.social_media.iam_service.model.response.IamResponse;
 import com.social_media.iam_service.model.response.PaginationResponse;
-import com.social_media.iam_service.repositories.PostRepository;
+import com.social_media.iam_service.repository.PostRepository;
+import com.social_media.iam_service.repository.criteria.PostSearchCriteria;
 import com.social_media.iam_service.service.PostService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.client.RestClient;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +30,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostMapper postMapper;
     private final PostRepository postRepository;
+    private final RestClient.Builder builder;
 
     @Override
     public IamResponse<PostDTO> getById(Integer postId) {
@@ -94,6 +99,28 @@ public class PostServiceImpl implements PostService {
         );
 
         return IamResponse.createSuccessful(paginationResponse);
+
+    }
+
+    @Override
+    public IamResponse<PaginationResponse<PostSearchDTO>> searchPosts(PostSearchRequest postSearchRequest, Pageable pageable) {
+        Specification<Post> specification = new PostSearchCriteria(postSearchRequest);
+        Page<PostSearchDTO> posts = postRepository.findAll(specification, pageable)
+                .map(postMapper::toPostSearchDTO);
+
+        PaginationResponse<PostSearchDTO> response = PaginationResponse.<PostSearchDTO>builder()
+                .data(posts.getContent())
+                .paginationData(
+                        PaginationResponse.PaginationResponseData.builder()
+                                .total(posts.getTotalElements())
+                                .limit(posts.getSize())
+                                .page(posts.getNumber() + 1)
+                                .pages(posts.getTotalPages())
+                                .build()
+                )
+                .build();
+
+        return IamResponse.createSuccessful(response);
 
     }
 }

@@ -11,6 +11,13 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Post {
+
+    public static final String ID_FIELD = "id";
+    public static final String TITLE_FIELD = "title";
+    public static final String CONTENT_FIELD = "content";
+    public static final String LIKES_FIELD = "likes";
+    public static final String DELETED_FIELD = "deleted";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

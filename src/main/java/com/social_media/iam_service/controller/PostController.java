@@ -4,6 +4,7 @@ import com.social_media.iam_service.model.constants.ApiLogMessage;
 import com.social_media.iam_service.model.dto.post.PostDTO;
 import com.social_media.iam_service.model.dto.post.PostSearchDTO;
 import com.social_media.iam_service.model.requests.post.PostRequest;
+import com.social_media.iam_service.model.requests.post.PostSearchRequest;
 import com.social_media.iam_service.model.response.IamResponse;
 import com.social_media.iam_service.model.response.PaginationResponse;
 import com.social_media.iam_service.service.PostService;
@@ -75,6 +76,20 @@ public class PostController {
         IamResponse<PaginationResponse<PostSearchDTO>> response = postService.findAllPosts(pageable);
         return ResponseEntity.ok(response);
 
+    }
+
+    @PostMapping("${end.point.search}")
+    public ResponseEntity<IamResponse<PaginationResponse<PostSearchDTO>>> searchPosts(
+            @RequestBody @Valid PostSearchRequest postSearchRequest,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "limit", defaultValue = "10") int limit
+    ) {
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        Pageable pageable = PageRequest.of(page, limit);
+        IamResponse<PaginationResponse<PostSearchDTO>> response = postService.searchPosts(postSearchRequest, pageable);
+
+        return ResponseEntity.ok(response);
     }
 
 }
